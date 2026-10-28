@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Registration {
+  id          Int      @id @default(autoincrement())
+  fullName    String   @map("full_name") @db.VarChar(100)
+  phoneNumber String   @unique @map("phone_number") @db.VarChar(20)
+  email       String?  @db.VarChar(255)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("registrations")
+}
+
+model ZaloGroup {
+  id        Int       @id @default(autoincrement())
+  groupName String    @map("group_name") @db.VarChar(200)
+  groupLink String    @map("group_link") @db.VarChar(500)
+  isActive  Boolean   @default(true) @map("is_active")
+  validFrom DateTime? @map("valid_from") @db.Timestamptz()
+  validTo   DateTime? @map("valid_to") @db.Timestamptz()
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@map("zalo_groups")
+}
+
+model SiteSetting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique @db.VarChar(100)
+  value     String?  @db.Text
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("site_settings")
+}
